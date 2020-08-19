@@ -4,6 +4,7 @@ package com.gupaoedu.vip;
  * @author : lipu
  * @since : 2020-08-18 20:50
  */
+@RpcService(IHelloService.class)
 public class HelloServiceImpl implements IHelloService {
     @Override
     public String sayHello(String content) {

@@ -36,6 +36,13 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+
+        <!--注解会用Spring-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.3.0.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>

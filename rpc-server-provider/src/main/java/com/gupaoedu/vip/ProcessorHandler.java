@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -15,11 +17,13 @@ import java.net.Socket;
 public class ProcessorHandler implements Runnable {
 
     private Socket socket;
-    private Object service;
+//    private Object service;
+    private Map<String,Object> handlerMap = new HashMap<>();
 
-    public ProcessorHandler(Socket socket, Object service) {
+    public ProcessorHandler(Socket socket, Map<String,Object> handlerMap) {
         this.socket = socket;
-        this.service = service;
+//        this.service = service;
+        this.handlerMap = handlerMap;
     }
 
     @Override
@@ -72,6 +76,13 @@ public class ProcessorHandler implements Runnable {
      */
     private Object invoke(RpcRequest rpcRequest) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //反射调用
+        String className = rpcRequest.getClassName();
+        Object service = handlerMap.get(className);
+        if (service == null) {
+            throw new RuntimeException("service not found:" + className);
+        }
+
+
         Object[] args = rpcRequest.getParameters();
         Class<?>[] types = new Class[args.length];//获取参数对应的类型
         for (int i = 0; i < args.length; i++) {
