@@ -1,5 +1,7 @@
 package com.gupaoedu.vip;
 
+import org.springframework.util.StringUtils;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -77,6 +79,10 @@ public class ProcessorHandler implements Runnable {
     private Object invoke(RpcRequest rpcRequest) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //反射调用
         String className = rpcRequest.getClassName();
+        String version = rpcRequest.getVersion();
+        if (!StringUtils.isEmpty(version)) {
+            className += "-" + version;
+        }
         Object service = handlerMap.get(className);
         if (service == null) {
             throw new RuntimeException("service not found:" + className);
