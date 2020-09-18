@@ -1,8 +1,5 @@
 package com.gupaoedu.vip;
 
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -19,15 +16,19 @@ import java.util.Map;
  * @author : lipu
  * @since : 2020-08-18 21:21
  */
-public class ProcessorHandler extends SimpleChannelInboundHandler<RpcRequest> {
+public class ProcessorHandlerForSocket implements Runnable {
 
+    private Socket socket;
+//    private Object service;
     private Map<String,Object> handlerMap = new HashMap<>();
 
-    public ProcessorHandler(Map<String,Object> handlerMap) {
+    public ProcessorHandlerForSocket(Socket socket, Map<String,Object> handlerMap) {
+        this.socket = socket;
+//        this.service = service;
         this.handlerMap = handlerMap;
     }
 
-    /*@Override
+    @Override
     public void run() {
         ObjectInputStream objectInputStream = null;
         ObjectOutputStream objectOutputStream = null;
@@ -69,7 +70,7 @@ public class ProcessorHandler extends SimpleChannelInboundHandler<RpcRequest> {
         }
     }
 
-*/
+
     /**
      * 生成指定的对象
      * @param rpcRequest 反序列化后的对象
@@ -89,24 +90,14 @@ public class ProcessorHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
 
         Object[] args = rpcRequest.getParameters();
-
-
-//        Class<?>[] types = new Class[args.length];//获取参数对应的类型
-//        for (int i = 0; i < args.length; i++) {
-//            types[i] = args[i].getClass();
-//        }
-
-        Method method = null;
+        Class<?>[] types = new Class[args.length];//获取参数对应的类型
+        for (int i = 0; i < args.length; i++) {
+            types[i] = args[i].getClass();
+        }
         Class<?> clazz = Class.forName(rpcRequest.getClassName());//根据请求的类进行加载HelloServiceImpl
-        method = clazz.getMethod(rpcRequest.getMethodName(),rpcRequest.getParamTypes());//sayHello,saveUser
+        Method method = clazz.getMethod(rpcRequest.getMethodName(),types);//sayHello,saveUser
         Object result = method.invoke(service, args);//HelloServiceImpl
 
         return result;
-    }
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
-        Object result=invoke(rpcRequest);
-        channelHandlerContext.writeAndFlush(result).addListener(ChannelFutureListener.CLOSE);
     }
 }
