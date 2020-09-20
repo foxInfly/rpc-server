@@ -13,7 +13,7 @@ public class RpcRequest implements Serializable {
     private String className;
     private String methodName;
     private Object[] parameters;
-    private Class<?> paramTypes;
+    private Class<?>[] paramTypes;
     private String version;
 
     public String getVersion() {
@@ -40,11 +40,11 @@ public class RpcRequest implements Serializable {
         return serialVersionUID;
     }
 
-    public Class<?> getParamTypes() {
+    public Class<?>[] getParamTypes() {
         return paramTypes;
     }
 
-    public void setParamTypes(Class<?> paramTypes) {
+    public void setParamTypes(Class<?>[] paramTypes) {
         this.paramTypes = paramTypes;
     }
 

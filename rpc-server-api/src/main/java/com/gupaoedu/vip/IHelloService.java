@@ -6,7 +6,7 @@ package com.gupaoedu.vip;
  */
 public interface IHelloService {
 
-    String sayHello(String content);
+    String sayHello(double money);
 
     /**
      * 保存用户
