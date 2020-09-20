@@ -109,7 +109,7 @@ public class GpRpcServer implements ApplicationContextAware, InitializingBean {
     }
 
     /**
-     * spring启动的时候去扫描，创建对象
+     * spring启动的时候去扫描，创建对象（要注册的暴露出去的对象）
      * @param applicationContext
      * @throws BeansException
      */
@@ -120,7 +120,7 @@ public class GpRpcServer implements ApplicationContextAware, InitializingBean {
             for (Object serviceBean : serviceBeanMap.values()) {
                 //拿到注解
                 RpcService rpcService = serviceBean.getClass().getAnnotation(RpcService.class);
-                String serviceName = rpcService.value().getName();//接口类
+                String serviceName = rpcService.value().getName();//接口类,类的全路径
                 String version = rpcService.version();//版本号
                 if (!StringUtils.isEmpty(version)) {
                     serviceName += "-" + version;
@@ -129,8 +129,15 @@ public class GpRpcServer implements ApplicationContextAware, InitializingBean {
                 registryCenter.registry(serviceName,getAddress()+":"+port);
             }
         }
+        for (String key : handlerMap.keySet()) {
+           System.out.println("已初始化 ==> 服务名： "+ key + " ， 对象： " + handlerMap.get(key));
+          }
     }
 
+    /**获取当前服务器的ip地址
+     * @author lipu
+     * @since 2020/9/20 21:35
+     */
     private static String getAddress(){
         InetAddress inetAddress=null;
         try {

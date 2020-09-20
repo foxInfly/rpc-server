@@ -6,7 +6,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * Hello world!
  */
-public class App {
+public class BootStrap {
     public static void main(String[] args) {
         /*IHelloService helloService = new HelloServiceImpl();
         RpcProxyServer proxyServer = new RpcProxyServer();

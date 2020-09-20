@@ -7,7 +7,7 @@ package com.gupaoedu.vip;
 @RpcService(value = IHelloService.class,version = "v2.0")
 public class HelloServiceImpl2 implements IHelloService {
     @Override
-    public String sayHello(String content) {
+    public String sayHello(double content) {
         System.out.println("【v2.0】request in:"+content);
         return "【v2.0】Say Hello:" + content;
     }
